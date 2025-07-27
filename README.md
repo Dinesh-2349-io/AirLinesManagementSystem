@@ -1,77 +1,54 @@
-# AirLinesManagementSystem
-This is totally dependent on Airlines Management System. And also have some information about that.
-import json
-import os
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-FLIGHT_FILE = 'flights.json'
-BOOKING_FILE = 'bookings.json'
+class Flight {
+    String id;
+    String name;
+    String source;
+    String destination;
+    int seats;
 
-
-def load_data(file):
-    if os.path.exists(file):
-        with open(file, 'r') as f:
-            return json.load(f)
-    return []
-
-
-def save_data(file, data):
-    with open(file, 'w') as f:
-        json.dump(data, f, indent=4)
-
-
-def add_flight():
-    flights = load_data(FLIGHT_FILE)
-    flight = {
-        "id": input("Enter Flight ID: "),
-        "name": input("Enter Airline Name: "),
-        "source": input("Enter Source City: "),
-        "destination": input("Enter Destination City: "),
-        "seats": int(input("Enter Total Seats: "))
-    }
-    flights.append(flight)
-    save_data(FLIGHT_FILE, flights)
-    print("✅ Flight added successfully.\n")
-
-
-def view_flights():
-    flights = load_data(FLIGHT_FILE)
-    if not flights:
-        print("❌ No flights available.\n")
-        return
-    print("\nAvailable Flights:")
-    for f in flights:
-        print(f"ID: {f['id']}, {f['name']} - {f['source']} ➡ {f['destination']}, Seats: {f['seats']}")
-    print()
-
-
-def book_ticket():
-    flights = load_data(FLIGHT_FILE)
-    bookings = load_data(BOOKING_FILE)
-
-    flight_id = input("Enter Flight ID to book: ")
-    flight = next((f for f in flights if f['id'] == flight_id), None)
-
-    if not flight:
-        print("❌ Flight not found.\n")
-        return
-    if flight['seats'] <= 0:
-        print("⚠️ No seats available on this flight.\n")
-        return
-
-    name = input("Enter Passenger Name: ")
-    seat_no = flight['seats']
-
-    booking = {
-        "flight_id": flight_id,
-        "passenger": name,
-        "seat_no": seat_no
+    public Flight(String id, String name, String source, String destination, int seats) {
+        this.id = id;
+        this.name = name;
+        this.source = source;
+        this.destination = destination;
+        this.seats = seats;
     }
 
-    bookings.append(booking)
-    flight['seats'] -= 1
+    @Override
+    public String toString() {
+        return "Flight ID: " + id + ", " + name + ", From: " + source + " To: " + destination + ", Seats Left: " + seats;
+    }
+}
 
-    save_data(BOOKING_FILE, bookings)
-    save_data(FLIGHT_FILE, flights)
+class Booking {
+    String passengerName;
+    String flightId;
+    int seatNumber;
 
-    print(f"✅ Ticket Booked! Seat No: {seat_no
-    
+    public Booking(String passengerName, String flightId, int seatNumber) {
+        this.passengerName = passengerName;
+        this.flightId = flightId;
+        this.seatNumber = seatNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Passenger: " + passengerName + ", Flight ID: " + flightId + ", Seat No: " + seatNumber;
+    }
+}
+
+public class AirlinesManagementSystem {
+    static List<Flight> flights = new ArrayList<>();
+    static List<Booking> bookings = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("\n=== Airlines Management System ===");
+            System.out.println("1. Add Flight");
+            System.out.println("2. View Flights");
+            System.out.println
